@@ -97,46 +97,87 @@ img {
     You know you love me 💖<br><br>
     <button onclick="yes()">Yes 😌</button>
     <button onclick="no()">No 😤</button>
+        <img src="photo4.jpeg">
+     
+
   </div>
 </div>
 
 <!-- Meme -->
 <div id="meme" class="screen hidden">
-  <div class="card">😭 Don’t lieee</div>
+    <div class="card">
+    <div id="meme-text" style="font-size:1.8rem;"></div>
+    <img src="photo8.jpeg">
+  </div>
+
+</div>
+<!-- Scene 2 -->
+<div id="s2" class="screen hidden">
+  <div class="card">
+    You know you love me 💖<br><br>
+    <img src="photo1.jpeg">
+     
+
+  </div>
 </div>
 
 <!-- Scene 2 -->
-<div id="s2" class="screen hidden">
-  <div class="card">I know you care 💕<br>Just shout whenever 📣</div>
+<div id="s3" class="screen hidden">
+  <div class="card">I know you care 💕<br>Just shout whenever <br>
+    <img src="photo6.jpeg">
+    <h5>
+        (Shout in mic!!! 🎤)
+    </h5>
+
 </div>
+
+</div>
+
+<!-- Scene 3 
+<div id="s3" class="screen hidden">
+    
+    <div class="card">Shout now!! 🎤</div>
+    
+</div>
+-->
 
 <!-- Scene 3 -->
-<div id="s3" class="screen hidden">
-  <div class="card">Shout now!! 🎤</div>
+<div id="s4" class="screen hidden">
+    <div class="card">
+      <img src="photo5.jpeg"> <br>
+    I’ll be there 💫
+  </div>
 </div>
 
+
 <!-- Scene 4 -->
-<div id="s4" class="screen hidden">
-  <div class="card">
-    I’ll be there 💫
-    <img src="our-photo.jpeg">
+<div id="s5" class="screen hidden">
+    <div class="card">
+      Are we an item?  Girl, quit playin' <br>
+      "We're just friends,"  what are you sayin'? <br>
+      Said, "There's another,"  and looked right in my eyes <br>
+    <div class="heart" onclick="breakHeart()">❤️</div>
+
   </div>
 </div>
 
 <!-- Scene 5 -->
-<div id="s5" class="screen hidden">
-  <div class="card">
-    My first love broke my heart 💔<br>
+<div id="s6" class="screen hidden">
+    <div class="card">
+    My first love Took my heart for the first time and i was like 💔<br>
     <div class="heart" onclick="breakHeart()">❤️</div>
+
   </div>
 </div>
+
 
 <!-- Final -->
 <div id="final" class="screen hidden">
   <div class="card">
-    🎉 HAPPY BIRTHDAY 🎉<br><br>
-    baby baby baby ohhhh 💃<br><br>
-    You’re my favorite human ❤️
+      HETVI HETVI HETVI ohhhh! 💃<br><br>
+      <img src="our-photo2.jpeg">
+      🎉 HAPPY BIRTHDAY HITLER 🎉<br><br>
+    You’re my favorite human ❤️ <br><br>
   </div>
 </div>
 
@@ -146,21 +187,37 @@ function switchScreen(from, to) {
   document.getElementById(to).classList.remove("hidden");
 }
 
+const memes = [
+  "😭 Don't lieee",
+  "🙄 Nice try bestie",
+  "💀 Girl we both know",
+  "🤡 Who u kidding lmaooo",
+  "😂 Okay sure",
+  "🫠 The audacity",
+];
+let noCount = 0;
+
+
+function on(id)  { document.getElementById(id)?.classList.remove("hidden"); }
+function off(id) { document.getElementById(id)?.classList.add("hidden"); }
+
+
 function yes() {
   switchScreen("s1", "s2");
-
+  
   setTimeout(() => {
-    switchScreen("s2", "s3");
-    startMic();
+      switchScreen("s2", "s3");
+      startMic();
   }, 2500);
 }
 
 function no() {
-  switchScreen("s1", "meme");
+//   switchScreen("s1", "meme");
+  document.getElementById("meme-text").textContent = memes[noCount % memes.length];
+  noCount++;
+  off("s1"); on("meme");
+  setTimeout(() => { off("meme"); on("s1"); }, 2200);
 
-  setTimeout(() => {
-    switchScreen("meme", "s1");
-  }, 2000);
 }
 
 async function startMic() {
@@ -177,10 +234,15 @@ async function startMic() {
     let volume = data.reduce((a,b)=>a+b)/data.length;
 
     if (volume > 60) {
-      switchScreen("s3", "s4");
-
+      switchScreen("s2", "s3");
+setTimeout(() => {
+        switchScreen("s3", "s4");
+      }, 3000);
       setTimeout(() => {
         switchScreen("s4", "s5");
+      }, 3000);
+         setTimeout(() => {
+        switchScreen("s5", "s6");
       }, 3000);
     } else {
       requestAnimationFrame(detect);
@@ -194,7 +256,7 @@ function breakHeart() {
   document.querySelector(".heart").innerHTML = "💔";
 
   setTimeout(() => {
-    switchScreen("s5", "final");
+    switchScreen("s6", "final");
   }, 1200);
 }
 </script>
