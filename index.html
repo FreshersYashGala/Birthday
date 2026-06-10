@@ -234,16 +234,10 @@ async function startMic() {
     let volume = data.reduce((a,b)=>a+b)/data.length;
 
     if (volume > 60) {
-      switchScreen("s2", "s3");
-setTimeout(() => {
-        switchScreen("s3", "s4");
-      }, 3000);
-      setTimeout(() => {
-        switchScreen("s4", "s5");
-      }, 3600);
-         setTimeout(() => {
-        switchScreen("s5", "s6");
-      }, 4200);
+ 
+   setTimeout(() => { off("s3"); on("s4"); }, 600);
+        setTimeout(() => { off("s4"); on("s5"); }, 3600);
+        setTimeout(() => { off("s5"); on("s6"); }, 6600);
     } else {
       requestAnimationFrame(detect);
     }
