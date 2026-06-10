@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You 💖</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.screen {
+  width: 100%;
+  max-width: 420px;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  transition: 0.6s ease;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(30px);
+}
+
+.card {
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.2);
+  border-radius: 25px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  font-size: 1.5rem;
+}
+
+button {
+  margin: 10px;
+  padding: 14px 22px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  background: white;
+  color: #ff6b81;
+  font-weight: bold;
+}
+
+.emoji {
+  position: absolute;
+  font-size: 2rem;
+  animation: float 4s infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+
+img {
+  width: 200px;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+
+.heart {
+  font-size: 5rem;
+  cursor: pointer;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Scene 1 -->
+<div id="s1" class="screen">
+  <div class="card">
+    You know you love me 💖<br><br>
+    <button onclick="yes()">Yes 😌</button>
+    <button onclick="no()">No 😤</button>
+  </div>
+</div>
+
+<!-- Meme -->
+<div id="meme" class="screen hidden">
+  <div class="card">😭 Don’t lieee</div>
+</div>
+
+<!-- Scene 2 -->
+<div id="s2" class="screen hidden">
+  <div class="card">I know you care 💕<br>Just shout whenever 📣</div>
+</div>
+
+<!-- Scene 3 -->
+<div id="s3" class="screen hidden">
+  <div class="card">Shout now!! 🎤</div>
+</div>
+
+<!-- Scene 4 -->
+<div id="s4" class="screen hidden">
+  <div class="card">
+    I’ll be there 💫
+    <img src="our-photo.jpeg">
+  </div>
+</div>
+
+<!-- Scene 5 -->
+<div id="s5" class="screen hidden">
+  <div class="card">
+    My first love broke my heart 💔<br>
+    <div class="heart" onclick="breakHeart()">❤️</div>
+  </div>
+</div>
+
+<!-- Final -->
+<div id="final" class="screen hidden">
+  <div class="card">
+    🎉 HAPPY BIRTHDAY 🎉<br><br>
+    baby baby baby ohhhh 💃<br><br>
+    You’re my favorite human ❤️
+  </div>
+</div>
+
+<script>
+function switchScreen(from, to) {
+  document.getElementById(from).classList.add("hidden");
+  document.getElementById(to).classList.remove("hidden");
+}
+
+function yes() {
+  switchScreen("s1", "s2");
+
+  setTimeout(() => {
+    switchScreen("s2", "s3");
+    startMic();
+  }, 2500);
+}
+
+function no() {
+  switchScreen("s1", "meme");
+
+  setTimeout(() => {
+    switchScreen("meme", "s1");
+  }, 2000);
+}
+
+async function startMic() {
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  const ctx = new AudioContext();
+  const mic = ctx.createMediaStreamSource(stream);
+  const analyser = ctx.createAnalyser();
+
+  mic.connect(analyser);
+  const data = new Uint8Array(analyser.frequencyBinCount);
+
+  function detect() {
+    analyser.getByteFrequencyData(data);
+    let volume = data.reduce((a,b)=>a+b)/data.length;
+
+    if (volume > 60) {
+      switchScreen("s3", "s4");
+
+      setTimeout(() => {
+        switchScreen("s4", "s5");
+      }, 3000);
+    } else {
+      requestAnimationFrame(detect);
+    }
+  }
+
+  detect();
+}
+
+function breakHeart() {
+  document.querySelector(".heart").innerHTML = "💔";
+
+  setTimeout(() => {
+    switchScreen("s5", "final");
+  }, 1200);
+}
+</script>
+
+</body>
+</html>
